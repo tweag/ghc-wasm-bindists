@@ -1,0 +1,26 @@
+cabal-version: 3.0
+name: ghc-wasm-bindists
+version: 0
+
+executable ghc-wasm-bindists
+  main-is: Main.hs
+  build-depends:
+    , aeson
+    , aeson-pretty
+    , base
+    , base64
+    , conduit
+    , containers
+    , cryptohash-sha256
+    , filepath
+    , http-conduit
+    , lens
+    , lens-aeson
+    , optparse-generic
+    , relude
+    , unliftio
+  mixins: base hiding (Prelude), relude (Relude as Prelude), relude
+  hs-source-dirs: app
+  default-language: GHC2021
+  default-extensions: BlockArguments DataKinds DeriveAnyClass DeriveGeneric DerivingStrategies DuplicateRecordFields LambdaCase NoFieldSelectors OverloadedLabels OverloadedRecordDot OverloadedStrings RecordWildCards StrictData
+  ghc-options: -Wall -Werror -Wunused-packages -Wwarn=unused-packages -Wno-name-shadowing

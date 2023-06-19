@@ -1,0 +1,33 @@
+name: Mirror
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 20 * * 0'
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v22
+      - name: Set release tag name
+        id: release-tag-name
+        run: |
+          echo "TAG=$(date --utc +'%Y%m%dT%H%M%S')" >> "$GITHUB_OUTPUT"
+      - name: Mirror
+        run: |
+          nix run . -- --download-url-prefix \
+            https://github.com/${{ github.repository }}/releases/download/$TAG/
+        env:
+          TAG: ${{ steps.release-tag-name.outputs.TAG }}
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        id: auto-commit-action
+        with:
+          commit_message: Update mirror metadata
+      - uses: softprops/action-gh-release@v1
+        if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        with:
+          tag_name: ${{ steps.release-tag-name.outputs.TAG }}
+          files: |
+            artifacts/*
