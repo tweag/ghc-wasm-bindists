@@ -201,7 +201,7 @@ bindistSrcs =
             ref = "ghc-9.6",
             jobName = "x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static",
             artifactPath = "ghc-x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static.tar.xz",
-            pipelineFilter = []
+            pipelineFilter = [("status", Just "success")]
           },
       (,)
         "wasi-sdk"
