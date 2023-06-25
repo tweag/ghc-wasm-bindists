@@ -30,9 +30,9 @@
         "sriHash": "sha256-BT2cOmx8adbNA8k/fv+Zvi+SAG2pOIpirgZiHAP8Aq8="
     },
     "wasm32-wasi-ghc-9.6": {
-        "mirrorUrl": "https://github.com/amesgen/ghc-wasm-bindists/releases/download/20230625T082649/wasm32-wasi-ghc-9.6.tar.xz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/1/jobs/1570112/artifacts/ghc-x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static.tar.xz",
-        "sriHash": "sha256-Ha3r8DGcPvjW6mJjyFeHEneBSfji+DVoW8Uw4QbkpHs="
+        "mirrorUrl": "https://github.com/amesgen/ghc-wasm-bindists/releases/download/20230625T083149/wasm32-wasi-ghc-9.6.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/1/jobs/1561269/artifacts/ghc-x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static.tar.xz",
+        "sriHash": "sha256-ElY9vOQwQSHR7CDBDaGDzfSgnpkz9mKeMAEFHnMXTU8="
     },
     "wasm32-wasi-ghc-gmp": {
         "mirrorUrl": "https://github.com/amesgen/ghc-wasm-bindists/releases/download/20230625T082649/wasm32-wasi-ghc-gmp.tar.xz",
