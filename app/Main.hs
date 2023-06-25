@@ -125,7 +125,7 @@ data BindistSrc
 getLatestBindistURL :: HTTP.Manager -> BindistSrc -> IO Url
 getLatestBindistURL mgr = \case
   GitLabArtifact {..} -> do
-    let projectUrl = "https://" <> gitlabDomain <> "/api/v4/projects" <> "/" <> show projectId
+    let projectUrl = "https://" <> gitlabDomain <> "/api/v4/projects/" <> show projectId
         pipelineUrl = toString $ projectUrl <> "/pipelines"
 
     apiRes <- fetch pipelineUrl $ ("ref", qv ref) : pipelineFilter
