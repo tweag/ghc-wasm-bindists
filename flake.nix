@@ -6,10 +6,10 @@
   outputs = inputs: inputs.flake-utils.lib.eachDefaultSystem (system:
     let
       pkgs = inputs.nixpkgs.legacyPackages.${system};
-      inherit (pkgs) haskell;
+      inherit (pkgs) lib haskell;
       hsPkgs = pkgs.haskellPackages.extend (hfinal: hprev: {
         ghc-wasm-bindists = hfinal.developPackage {
-          root = ./.;
+          root = lib.sourceFilesBySuffices ./. [ ".cabal" ".hs" ];
           modifier = haskell.lib.compose.overrideCabal {
             enableExecutableProfiling = false;
             doHaddock = false;
