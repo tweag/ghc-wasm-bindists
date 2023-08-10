@@ -204,6 +204,16 @@ bindistSrcs =
             pipelineFilter = [("status", Just "success")]
           },
       (,)
+        "wasm32-wasi-ghc-9.8"
+        GitLabArtifact
+          { gitlabDomain = "gitlab.haskell.org",
+            projectId = 1,
+            ref = "ghc-9.8",
+            jobName = "x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static",
+            artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+            pipelineFilter = [("status", Just "success")]
+          },
+      (,)
         "wasi-sdk"
         GitLabArtifact
           { gitlabDomain = "gitlab.haskell.org",
