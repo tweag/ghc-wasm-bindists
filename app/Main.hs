@@ -125,18 +125,27 @@ data BindistSrc
 getLatestBindistURL :: HTTP.Manager -> BindistSrc -> IO Url
 getLatestBindistURL mgr = \case
   GitLabArtifact {..} -> do
-    let projectUrl = "https://" <> gitlabDomain <> "/api/v4/projects/" <> show projectId
-        pipelineUrl = toString $ projectUrl <> "/pipelines"
+    Just url <- runConduit $ pipelineIds .| concatMapMC getPipelineJobUrl .| headC
+    pure url
+    where
+      projectUrl = "https://" <> gitlabDomain <> "/api/v4/projects/" <> show projectId
+      pipelineUrl = toString $ projectUrl <> "/pipelines"
 
-    apiRes <- fetch pipelineUrl $ ("ref", qv ref) : pipelineFilter
-    Just pipelineId <- pure $ apiRes ^? nth 0 . key "id" . _Integer
+      pipelineIds = do
+        apiRes <- liftIO $ fetch pipelineUrl $ ("ref", qv ref) : pipelineFilter
+        yieldMany $ apiRes ^.. values . key "id" . _Integer
 
-    apiRes <-
-      fetch (pipelineUrl <> "/" <> show pipelineId <> "/jobs") [("per_page", Just "100")]
-    let hasJobName = filteredBy $ key "name" . _String . only jobName
-    Just jobId <- pure $ apiRes ^? values . hasJobName . key "id" . _Integer
+      getPipelineJobUrl pipelineId = do
+        apiRes <-
+          fetch
+            (pipelineUrl <> "/" <> show pipelineId <> "/jobs")
+            [("per_page", Just "100"), ("scope", Just "success")]
+        let hasJobName = filteredBy $ key "name" . _String . only jobName
+            jobId = apiRes ^? values . hasJobName . key "id" . _Integer
+        pure $ downloadUrlForJobId <$> jobId
 
-    pure $ projectUrl <> "/jobs/" <> show jobId <> "/artifacts/" <> artifactPath
+      downloadUrlForJobId jobId =
+        projectUrl <> "/jobs/" <> show jobId <> "/artifacts/" <> artifactPath
   GitHubArtifact {..} -> do
     let runsUrl = toString $ "https://api.github.com/repos/" <> ownerRepo <> "/actions" <> "/runs"
 
