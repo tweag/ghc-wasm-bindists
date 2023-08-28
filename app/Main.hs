@@ -229,7 +229,7 @@ bindistSrcs =
             projectId = 3212,
             ref = "main",
             jobName = "x86_64-linux",
-            artifactPath = "dist/wasi-sdk-17-linux.tar.gz",
+            artifactPath = "dist/wasi-sdk-18-linux.tar.gz",
             pipelineFilter = [("status", Just "success")]
           },
       (,)
@@ -239,7 +239,7 @@ bindistSrcs =
             projectId = 3212,
             ref = "main",
             jobName = "darwin",
-            artifactPath = "dist/wasi-sdk-17-macos.tar.gz",
+            artifactPath = "dist/wasi-sdk-18-macos.tar.gz",
             pipelineFilter = [("status", Just "success")]
           },
       (,)
@@ -249,7 +249,7 @@ bindistSrcs =
             projectId = 3212,
             ref = "main",
             jobName = "aarch64-linux",
-            artifactPath = "dist/wasi-sdk-17-linux.tar.gz",
+            artifactPath = "dist/wasi-sdk-18-linux.tar.gz",
             pipelineFilter = [("status", Just "success")]
           },
       (,)
