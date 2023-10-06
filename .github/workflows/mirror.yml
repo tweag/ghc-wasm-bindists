@@ -22,7 +22,7 @@ jobs:
             https://github.com/${{ github.repository }}/releases/download/$TAG/
         env:
           TAG: ${{ steps.release-tag-name.outputs.TAG }}
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         id: auto-commit-action
         with:
           commit_message: Update mirror metadata
