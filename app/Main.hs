@@ -8,34 +8,32 @@ import Data.Aeson.Encode.Pretty qualified as AEP
 import Data.Aeson.Lens
 import Data.ByteString.Base64 (encodeBase64)
 import Data.ByteString.Lazy qualified as BL
+import Data.Conduit.Lzma qualified as Lzma
+import Data.Conduit.Tar qualified as Tar
 import Data.Map.Merge.Strict qualified as Map
 import Data.Map.Strict qualified as Map
 import Data.Text qualified as T
+import Deriving.Aeson
 import Network.HTTP.Client.Conduit (defaultManagerSettings)
 import Network.HTTP.Conduit qualified as HTTP
 import Options.Generic qualified as OG
 import System.FilePath
 import UnliftIO.Directory
 
-data CLI = CLI
-  { downloadUrlPrefix :: Text,
-    artifactDir :: FilePath OG.<!> "artifacts",
-    metadataPath :: FilePath OG.<!> "meta.json"
+data CLI w = CLI
+  { downloadUrlPrefix :: w OG.::: Text,
+    artifactDir :: w OG.::: FilePath OG.<!> "artifacts",
+    metadataPath :: w OG.::: FilePath OG.<!> "meta.json"
   }
-  deriving stock (Show, Generic)
+  deriving stock (Generic)
 
-instance OG.ParseRecord CLI where
+instance OG.ParseRecord (CLI OG.Wrapped) where
   parseRecord = OG.parseRecordWithModifiers OG.lispCaseModifiers
 
 main :: IO ()
 main = do
   for_ [stdout, stderr] $ flip hSetBuffering LineBuffering
-  CLI
-    { artifactDir = OG.DefValue artifactDir,
-      metadataPath = OG.DefValue metadataPath,
-      ..
-    } <-
-    OG.getRecord "mirror various GHC WASM bindists"
+  CLI {..} <- OG.unwrapRecord "mirror various GHC WASM bindists"
   mgr <- HTTP.newManager defaultManagerSettings
   bindists <- loadStoredBindists metadataPath
   bindists <- updateStoredBindists mgr downloadUrlPrefix artifactDir bindists
@@ -46,10 +44,11 @@ type Url = Text -- such typesafe much wow
 data StoredBindist = StoredBindist
   { mirrorUrl :: Url,
     originalUrl :: Url,
-    sriHash :: Text
+    sriHash :: Text,
+    ghcSubdir :: Maybe Text
   }
   deriving stock (Show, Generic)
-  deriving anyclass (A.FromJSON, A.ToJSON)
+  deriving (A.FromJSON, A.ToJSON) via CustomJSON '[OmitNothingFields] StoredBindist
 
 type StoredBindists = Map Text StoredBindist
 
@@ -69,12 +68,12 @@ updateStoredBindists mgr urlPrefix bindistDir =
     do Map.traverseMissing \name src -> updateBindist name src Nothing
     do Map.preserveMissing
     do Map.zipWithAMatched \name src -> updateBindist name src . Just
-    bindistSrcs
+    bindistInfos
   where
-    updateBindist :: Text -> BindistSrc -> Maybe StoredBindist -> IO StoredBindist
-    updateBindist bindistName bindistSrc prevBindist = do
+    updateBindist :: Text -> BindistInfo -> Maybe StoredBindist -> IO StoredBindist
+    updateBindist bindistName bindistInfo prevBindist = do
       putTextLn $ "checking " <> bindistName
-      originalUrl <- getLatestBindistURL mgr bindistSrc
+      originalUrl <- getLatestBindistURL mgr bindistInfo.src
       case prevBindist of
         Just bindist | bindist.originalUrl == originalUrl -> do
           putTextLn "no updates"
@@ -84,23 +83,36 @@ updateStoredBindists mgr urlPrefix bindistDir =
           createDirectoryIfMissing True bindistDir
           let fileName = fileNameFor originalUrl
           req <- HTTP.parseUrlThrow (toString originalUrl)
-          sha256 <- runConduitRes do
+          (sha256, ghcSubdir) <- runConduitRes do
             res <- lift $ HTTP.http req mgr
-            HTTP.responseBody res
-              .| getZipSink do
-                ZipSink (sinkFile (bindistDir </> toString fileName))
-                  *> ZipSink sinkSha256
+            HTTP.responseBody res .| getZipSink do
+              ZipSink $ sinkFile (bindistDir </> toString fileName)
+              sha256 <- ZipSink sinkSha256
+              ghcSubdir <-
+                if bindistInfo.isGhcBindist
+                  then ZipSink do
+                    Just fi <- Lzma.decompress Nothing .| Tar.untar yield .| headC
+                    pure $ Just $ T.takeWhile (/= '/') $ decodeUtf8 $ Tar.filePath fi
+                  else pure Nothing
+              pure (sha256, ghcSubdir)
           pure
             StoredBindist
               { mirrorUrl = urlPrefix <> fileName,
                 originalUrl = originalUrl,
-                sriHash = "sha256-" <> encodeBase64 sha256
+                sriHash = "sha256-" <> encodeBase64 sha256,
+                ghcSubdir
               }
       where
         sinkSha256 = SHA256.finalize <$> foldlC SHA256.update SHA256.init
         fileNameFor url = bindistName <> urlExt
           where
             urlExt = T.dropWhile (/= '.') . T.takeWhileEnd (/= '/') $ url
+
+data BindistInfo = BindistInfo
+  { isGhcBindist :: Bool,
+    src :: BindistSrc
+  }
+  deriving stock (Show)
 
 -- get the latest version of a bindist
 
@@ -169,125 +181,173 @@ getLatestBindistURL mgr = \case
 
     qv = Just . encodeUtf8
 
-bindistSrcs :: Map Text BindistSrc
-bindistSrcs =
+bindistInfos :: Map Text BindistInfo
+bindistInfos =
   Map.fromList
     [ (,)
         "wasm32-wasi-ghc-gmp"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.haskell.org",
-            projectId = 1,
-            ref = "master",
-            jobName = "nightly-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static",
-            artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
-            pipelineFilter = [("source", Just "schedule"), ("scope", Just "finished")]
+        BindistInfo
+          { isGhcBindist = True,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1,
+                  ref = "master",
+                  jobName = "nightly-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = [("source", Just "schedule"), ("scope", Just "finished")]
+                }
           },
       (,)
         "wasm32-wasi-ghc-native"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.haskell.org",
-            projectId = 1,
-            ref = "master",
-            jobName = "nightly-x86_64-linux-alpine3_17-wasm-int_native-cross_wasm32-wasi-release+fully_static",
-            artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-int_native-cross_wasm32-wasi-release+fully_static.tar.xz",
-            pipelineFilter = [("source", Just "schedule"), ("scope", Just "finished")]
+        BindistInfo
+          { isGhcBindist = True,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1,
+                  ref = "master",
+                  jobName = "nightly-x86_64-linux-alpine3_17-wasm-int_native-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-int_native-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = [("source", Just "schedule"), ("scope", Just "finished")]
+                }
           },
       (,)
         "wasm32-wasi-ghc-unreg"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.haskell.org",
-            projectId = 1,
-            ref = "master",
-            jobName = "nightly-x86_64-linux-alpine3_17-wasm-unreg-cross_wasm32-wasi-release+fully_static",
-            artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-unreg-cross_wasm32-wasi-release+fully_static.tar.xz",
-            pipelineFilter = [("source", Just "schedule"), ("scope", Just "finished")]
+        BindistInfo
+          { isGhcBindist = True,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1,
+                  ref = "master",
+                  jobName = "nightly-x86_64-linux-alpine3_17-wasm-unreg-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-unreg-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = [("source", Just "schedule"), ("scope", Just "finished")]
+                }
           },
       (,)
         "wasm32-wasi-ghc-9.6"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.haskell.org",
-            projectId = 1,
-            ref = "ghc-9.6",
-            jobName = "x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static",
-            artifactPath = "ghc-x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static.tar.xz",
-            pipelineFilter = [("status", Just "success")]
+        BindistInfo
+          { isGhcBindist = True,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1,
+                  ref = "ghc-9.6",
+                  jobName = "x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = [("status", Just "success")]
+                }
           },
       (,)
         "wasm32-wasi-ghc-9.8"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.haskell.org",
-            projectId = 1,
-            ref = "ghc-9.8",
-            jobName = "x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static",
-            artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
-            pipelineFilter = [("status", Just "success")]
+        BindistInfo
+          { isGhcBindist = True,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1,
+                  ref = "ghc-9.8",
+                  jobName = "x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = [("status", Just "success")]
+                }
           },
       (,)
         "wasi-sdk"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.haskell.org",
-            projectId = 3212,
-            ref = "main",
-            jobName = "x86_64-linux",
-            artifactPath = "dist/wasi-sdk-18-linux.tar.gz",
-            pipelineFilter = [("status", Just "success")]
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 3212,
+                  ref = "main",
+                  jobName = "x86_64-linux",
+                  artifactPath = "dist/wasi-sdk-18-linux.tar.gz",
+                  pipelineFilter = [("status", Just "success")]
+                }
           },
       (,)
         "wasi-sdk-darwin"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.haskell.org",
-            projectId = 3212,
-            ref = "main",
-            jobName = "darwin",
-            artifactPath = "dist/wasi-sdk-18-macos.tar.gz",
-            pipelineFilter = [("status", Just "success")]
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 3212,
+                  ref = "main",
+                  jobName = "darwin",
+                  artifactPath = "dist/wasi-sdk-18-macos.tar.gz",
+                  pipelineFilter = [("status", Just "success")]
+                }
           },
       (,)
         "wasi-sdk-aarch64-linux"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.haskell.org",
-            projectId = 3212,
-            ref = "main",
-            jobName = "aarch64-linux",
-            artifactPath = "dist/wasi-sdk-18-linux.tar.gz",
-            pipelineFilter = [("status", Just "success")]
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 3212,
+                  ref = "main",
+                  jobName = "aarch64-linux",
+                  artifactPath = "dist/wasi-sdk-18-linux.tar.gz",
+                  pipelineFilter = [("status", Just "success")]
+                }
           },
       (,)
         "libffi-wasm"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.haskell.org",
-            projectId = 3214,
-            ref = "master",
-            jobName = "x86_64-linux",
-            artifactPath = "",
-            pipelineFilter = []
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 3214,
+                  ref = "master",
+                  jobName = "x86_64-linux",
+                  artifactPath = "",
+                  pipelineFilter = []
+                }
           },
       (,)
         "binaryen"
-        GitHubArtifact
-          { ownerRepo = "type-dance/binaryen",
-            branch = "main",
-            workflowName = "release",
-            artifactName = "release-ubuntu-latest",
-            event = "push"
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitHubArtifact
+                { ownerRepo = "type-dance/binaryen",
+                  branch = "main",
+                  workflowName = "release",
+                  artifactName = "release-ubuntu-latest",
+                  event = "push"
+                }
           },
       (,)
         "wizer"
-        GitHubArtifact
-          { ownerRepo = "bytecodealliance/wizer",
-            branch = "main",
-            workflowName = "Release",
-            artifactName = "bins-x86_64-linux",
-            event = "push"
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitHubArtifact
+                { ownerRepo = "bytecodealliance/wizer",
+                  branch = "main",
+                  workflowName = "Release",
+                  artifactName = "bins-x86_64-linux",
+                  event = "push"
+                }
           },
       (,)
         "proot"
-        GitLabArtifact
-          { gitlabDomain = "gitlab.com",
-            projectId = 9799675,
-            ref = "master",
-            jobName = "dist",
-            artifactPath = "dist/proot",
-            pipelineFilter = []
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.com",
+                  projectId = 9799675,
+                  ref = "master",
+                  jobName = "dist",
+                  artifactPath = "dist/proot",
+                  pipelineFilter = []
+                }
           }
     ]
