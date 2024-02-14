@@ -233,11 +233,11 @@ bindistInfos =
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
-                  projectId = 1,
+                  projectId = 3223,
                   ref = "ghc-9.6",
-                  jobName = "x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_12-cross_wasm32-wasi-release+fully_static.tar.xz",
-                  pipelineFilter = [("status", Just "success")]
+                  jobName = "x86_64-linux-alpine3_17-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_17-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = []
                 }
           },
       (,)
@@ -247,11 +247,11 @@ bindistInfos =
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
-                  projectId = 1,
+                  projectId = 3223,
                   ref = "ghc-9.8",
                   jobName = "x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static",
                   artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
-                  pipelineFilter = [("status", Just "success")]
+                  pipelineFilter = []
                 }
           },
       (,)
@@ -264,7 +264,7 @@ bindistInfos =
                   projectId = 3212,
                   ref = "main",
                   jobName = "x86_64-linux",
-                  artifactPath = "dist/wasi-sdk-18-linux.tar.gz",
+                  artifactPath = "dist/wasi-sdk-19-linux.tar.gz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
@@ -278,7 +278,7 @@ bindistInfos =
                   projectId = 3212,
                   ref = "main",
                   jobName = "darwin",
-                  artifactPath = "dist/wasi-sdk-18-macos.tar.gz",
+                  artifactPath = "dist/wasi-sdk-19-macos.tar.gz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
@@ -292,7 +292,7 @@ bindistInfos =
                   projectId = 3212,
                   ref = "main",
                   jobName = "aarch64-linux",
-                  artifactPath = "dist/wasi-sdk-18-linux.tar.gz",
+                  artifactPath = "dist/wasi-sdk-19-linux.tar.gz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
@@ -320,19 +320,6 @@ bindistInfos =
                   branch = "main",
                   workflowName = "release",
                   artifactName = "release-ubuntu-latest",
-                  event = "push"
-                }
-          },
-      (,)
-        "wizer"
-        BindistInfo
-          { isGhcBindist = False,
-            src =
-              GitHubArtifact
-                { ownerRepo = "bytecodealliance/wizer",
-                  branch = "main",
-                  workflowName = "Release",
-                  artifactName = "bins-x86_64-linux",
                   event = "push"
                 }
           },
