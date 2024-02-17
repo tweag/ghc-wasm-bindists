@@ -193,9 +193,9 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1,
                   ref = "master",
-                  jobName = "nightly-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
-                  pipelineFilter = [("source", Just "schedule"), ("scope", Just "finished")]
+                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = [("source", Just "schedule")]
                 }
           },
       (,)
@@ -207,9 +207,9 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1,
                   ref = "master",
-                  jobName = "nightly-x86_64-linux-alpine3_17-wasm-int_native-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-int_native-cross_wasm32-wasi-release+fully_static.tar.xz",
-                  pipelineFilter = [("source", Just "schedule"), ("scope", Just "finished")]
+                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-int_native-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-int_native-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = [("source", Just "schedule")]
                 }
           },
       (,)
@@ -221,9 +221,9 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1,
                   ref = "master",
-                  jobName = "nightly-x86_64-linux-alpine3_17-wasm-unreg-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-unreg-cross_wasm32-wasi-release+fully_static.tar.xz",
-                  pipelineFilter = [("source", Just "schedule"), ("scope", Just "finished")]
+                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-unreg-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-unreg-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = [("source", Just "schedule")]
                 }
           },
       (,)
@@ -235,8 +235,8 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 3223,
                   ref = "ghc-9.6",
-                  jobName = "x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  jobName = "x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
                   pipelineFilter = []
                 }
           },
@@ -249,8 +249,8 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 3223,
                   ref = "ghc-9.8",
-                  jobName = "x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_17-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  jobName = "x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
                   pipelineFilter = []
                 }
           },
