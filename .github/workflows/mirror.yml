@@ -26,7 +26,7 @@ jobs:
         id: auto-commit-action
         with:
           commit_message: Update mirror metadata
-      - uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release@v2
         if: steps.auto-commit-action.outputs.changes_detected == 'true'
         with:
           tag_name: ${{ steps.release-tag-name.outputs.TAG }}
