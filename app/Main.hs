@@ -234,6 +234,20 @@ bindistInfos =
                 }
           },
       (,)
+        "wasm32-wasi-ghc-9.10"
+        BindistInfo
+          { isGhcBindist = True,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1,
+                  ref = "ghc-9.10",
+                  jobName = "x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  pipelineFilter = [] -- [("status", Just "success")]
+                }
+          },
+      (,)
         "wasi-sdk"
         BindistInfo
           { isGhcBindist = False,
