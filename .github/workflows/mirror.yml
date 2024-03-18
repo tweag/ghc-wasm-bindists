@@ -1,6 +1,11 @@
 name: Mirror
 on:
   workflow_dispatch:
+    inputs:
+      bindistRegex:
+        description: 'Regex for which bindists to update'
+        required: false
+        type: string
   schedule:
     - cron: '0 20 * * 0'
 jobs:
@@ -19,7 +24,8 @@ jobs:
       - name: Mirror
         run: |
           nix run . -- --download-url-prefix \
-            https://github.com/${{ github.repository }}/releases/download/$TAG/
+            https://github.com/${{ github.repository }}/releases/download/$TAG/ \
+            --bindist-regex '${{ inputs.bindistRegex || '' }}'
         env:
           TAG: ${{ steps.release-tag-name.outputs.TAG }}
       - uses: stefanzweifel/git-auto-commit-action@v5

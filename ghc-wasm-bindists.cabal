@@ -19,6 +19,7 @@ executable ghc-wasm-bindists
     , lens-aeson
     , lzma-conduit
     , optparse-generic
+    , pcre2
     , relude
     , tar-conduit
     , unliftio
