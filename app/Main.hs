@@ -18,12 +18,14 @@ import Network.HTTP.Client.Conduit (defaultManagerSettings)
 import Network.HTTP.Conduit qualified as HTTP
 import Options.Generic qualified as OG
 import System.FilePath
+import Text.Regex.Pcre2 qualified as Pcre2
 import UnliftIO.Directory
 
 data CLI w = CLI
   { downloadUrlPrefix :: w OG.::: Text,
     artifactDir :: w OG.::: FilePath OG.<!> "artifacts",
-    metadataPath :: w OG.::: FilePath OG.<!> "meta.json"
+    metadataPath :: w OG.::: FilePath OG.<!> "meta.json",
+    bindistRegex :: w OG.::: Text OG.<!> ""
   }
   deriving stock (Generic)
 
@@ -33,10 +35,10 @@ instance OG.ParseRecord (CLI OG.Wrapped) where
 main :: IO ()
 main = do
   for_ [stdout, stderr] $ flip hSetBuffering LineBuffering
-  CLI {..} <- OG.unwrapRecord "mirror various GHC WASM bindists"
+  cli@CLI {..} <- OG.unwrapRecord "mirror various GHC WASM bindists"
   mgr <- HTTP.newManager defaultManagerSettings
   bindists <- loadStoredBindists metadataPath
-  bindists <- updateStoredBindists mgr downloadUrlPrefix artifactDir bindists
+  bindists <- updateStoredBindists mgr cli artifactDir bindists
   saveStoredBindists metadataPath bindists
 
 type Url = Text -- such typesafe much wow
@@ -62,46 +64,48 @@ saveStoredBindists :: FilePath -> StoredBindists -> IO ()
 saveStoredBindists path = BL.writeFile path . AEP.encodePretty
 
 updateStoredBindists ::
-  HTTP.Manager -> Text -> FilePath -> StoredBindists -> IO StoredBindists
-updateStoredBindists mgr urlPrefix bindistDir =
+  HTTP.Manager -> CLI OG.Unwrapped -> FilePath -> StoredBindists -> IO StoredBindists
+updateStoredBindists mgr cli bindistDir =
   Map.mergeA
-    do Map.traverseMissing \name src -> updateBindist name src Nothing
+    do Map.traverseMaybeMissing \name src -> updateBindist name src Nothing
     do Map.preserveMissing
-    do Map.zipWithAMatched \name src -> updateBindist name src . Just
+    do Map.zipWithMaybeAMatched \name src -> updateBindist name src . Just
     bindistInfos
   where
-    updateBindist :: Text -> BindistInfo -> Maybe StoredBindist -> IO StoredBindist
-    updateBindist bindistName bindistInfo prevBindist = do
-      putTextLn $ "checking " <> bindistName
-      originalUrl <- getLatestBindistURL mgr bindistInfo.src
-      case prevBindist of
-        Just bindist | bindist.originalUrl == originalUrl -> do
-          putTextLn "no updates"
-          pure bindist
-        _ -> do
-          putTextLn "updating"
-          createDirectoryIfMissing True bindistDir
-          let fileName = fileNameFor originalUrl
-          req <- HTTP.parseUrlThrow (toString originalUrl)
-          (sha256, ghcSubdir) <- runConduitRes do
-            res <- lift $ HTTP.http req mgr
-            HTTP.responseBody res .| getZipSink do
-              ZipSink $ sinkFile (bindistDir </> toString fileName)
-              sha256 <- ZipSink sinkSha256
-              ghcSubdir <-
-                if bindistInfo.isGhcBindist
-                  then ZipSink do
-                    Just fi <- Lzma.decompress Nothing .| Tar.untar yield .| headC
-                    pure $ Just $ T.takeWhile (/= '/') $ decodeUtf8 $ Tar.filePath fi
-                  else pure Nothing
-              pure (sha256, ghcSubdir)
-          pure
-            StoredBindist
-              { mirrorUrl = urlPrefix <> fileName,
-                originalUrl = originalUrl,
-                sriHash = "sha256-" <> encodeBase64 sha256,
-                ghcSubdir
-              }
+    updateBindist :: Text -> BindistInfo -> Maybe StoredBindist -> IO (Maybe StoredBindist)
+    updateBindist bindistName bindistInfo prevBindist
+      | Pcre2.matches cli.bindistRegex bindistName = fmap Just do
+          putTextLn $ "checking " <> bindistName
+          originalUrl <- getLatestBindistURL mgr bindistInfo.src
+          case prevBindist of
+            Just bindist | bindist.originalUrl == originalUrl -> do
+              putTextLn "no updates"
+              pure bindist
+            _ -> do
+              putTextLn "updating"
+              createDirectoryIfMissing True bindistDir
+              let fileName = fileNameFor originalUrl
+              req <- HTTP.parseUrlThrow (toString originalUrl)
+              (sha256, ghcSubdir) <- runConduitRes do
+                res <- lift $ HTTP.http req mgr
+                HTTP.responseBody res .| getZipSink do
+                  ZipSink $ sinkFile (bindistDir </> toString fileName)
+                  sha256 <- ZipSink sinkSha256
+                  ghcSubdir <-
+                    if bindistInfo.isGhcBindist
+                      then ZipSink do
+                        Just fi <- Lzma.decompress Nothing .| Tar.untar yield .| headC
+                        pure $ Just $ T.takeWhile (/= '/') $ decodeUtf8 $ Tar.filePath fi
+                      else pure Nothing
+                  pure (sha256, ghcSubdir)
+              pure
+                StoredBindist
+                  { mirrorUrl = cli.downloadUrlPrefix <> fileName,
+                    originalUrl = originalUrl,
+                    sriHash = "sha256-" <> encodeBase64 sha256,
+                    ghcSubdir
+                  }
+      | otherwise = pure prevBindist
       where
         sinkSha256 = SHA256.finalize <$> foldlC SHA256.update SHA256.init
         fileNameFor url = bindistName <> urlExt
