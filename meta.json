@@ -29,6 +29,12 @@
         "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3212/jobs/1803268/artifacts/dist/wasi-sdk-19-macos.tar.gz",
         "sriHash": "sha256-NB2y+1tiaPB8gujIQrjp4J3nR4TvNzMMwFyXx9DrpSM="
     },
+    "wasm32-wasi-ghc-9.10": {
+        "ghcSubdir": "ghc-9.10.0.20240313-wasm32-wasi",
+        "mirrorUrl": "https://github.com/amesgen/ghc-wasm-bindists/releases/download/20240318T183143/wasm32-wasi-ghc-9.10.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/1/jobs/1808017/artifacts/ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+        "sriHash": "sha256-4u5aBBfzYXqT+MqN8rRVwX5Q3V+3ULL74351mCw6SRc="
+    },
     "wasm32-wasi-ghc-9.6": {
         "ghcSubdir": "ghc-9.6.4-wasm32-wasi",
         "mirrorUrl": "https://github.com/amesgen/ghc-wasm-bindists/releases/download/20240218T031934/wasm32-wasi-ghc-9.6.tar.xz",
