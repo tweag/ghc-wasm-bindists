@@ -261,7 +261,7 @@ bindistInfos =
                   projectId = 3212,
                   ref = "main",
                   jobName = "x86_64-linux",
-                  artifactPath = "dist/wasi-sdk-19-linux.tar.gz",
+                  artifactPath = "dist/wasi-sdk-22-linux.tar.gz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
@@ -275,7 +275,7 @@ bindistInfos =
                   projectId = 3212,
                   ref = "main",
                   jobName = "darwin",
-                  artifactPath = "dist/wasi-sdk-19-macos.tar.gz",
+                  artifactPath = "dist/wasi-sdk-22-macos.tar.gz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
@@ -289,7 +289,7 @@ bindistInfos =
                   projectId = 3212,
                   ref = "main",
                   jobName = "aarch64-linux",
-                  artifactPath = "dist/wasi-sdk-19-linux.tar.gz",
+                  artifactPath = "dist/wasi-sdk-22-linux.tar.gz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
