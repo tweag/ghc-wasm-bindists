@@ -129,6 +129,12 @@ data BindistSrc
         artifactPath :: Text,
         pipelineFilter :: [(ByteString, Maybe ByteString)]
       }
+  | GitHubArtifact
+      { ownerRepo :: Text,
+        branch :: Text,
+        workflowName :: Text,
+        artifactName :: Text
+      }
   deriving stock (Show)
 
 getLatestBindistURL :: HTTP.Manager -> BindistSrc -> IO Url
@@ -155,6 +161,20 @@ getLatestBindistURL mgr = \case
 
       downloadUrlForJobId jobId =
         projectUrl <> "/jobs/" <> show jobId <> "/artifacts/" <> artifactPath
+  GitHubArtifact {..} -> do
+    let runsUrl = toString $ "https://api.github.com/repos/" <> ownerRepo <> "/actions" <> "/runs"
+
+    apiRes <- fetch runsUrl [("branch", qv branch)]
+    let hasWorkflowName = filteredBy $ key "name" . _String . only workflowName
+    Just runId <-
+      pure $ apiRes ^? key "workflow_runs" . values . hasWorkflowName . key "id" . _Integer
+
+    apiRes <- fetch (runsUrl <> "/" <> show runId <> "/artifacts") []
+    let hasArtifactName = filteredBy $ key "name" . _String . only artifactName
+    Just artifactId <-
+      pure $ apiRes ^? key "artifacts" . values . hasArtifactName . key "id" . _Integer
+
+    pure $ "https://nightly.link/" <> ownerRepo <> "/actions/artifacts/" <> show artifactId <> ".zip"
   where
     fetch url qs = do
       req <- HTTP.setQueryString qs <$> HTTP.parseUrlThrow url
