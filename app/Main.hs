@@ -259,7 +259,7 @@ bindistInfos =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 3212,
-                  ref = "main",
+                  ref = "master",
                   jobName = "x86_64-linux",
                   artifactPath = "dist/wasi-sdk-22-linux.tar.gz",
                   pipelineFilter = [("status", Just "success")]
@@ -273,7 +273,7 @@ bindistInfos =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 3212,
-                  ref = "main",
+                  ref = "master",
                   jobName = "darwin",
                   artifactPath = "dist/wasi-sdk-22-macos.tar.gz",
                   pipelineFilter = [("status", Just "success")]
@@ -287,7 +287,7 @@ bindistInfos =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 3212,
-                  ref = "main",
+                  ref = "master",
                   jobName = "aarch64-linux",
                   artifactPath = "dist/wasi-sdk-22-linux.tar.gz",
                   pipelineFilter = [("status", Just "success")]
