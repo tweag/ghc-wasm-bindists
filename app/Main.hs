@@ -272,6 +272,30 @@ bindistInfos =
                 }
           },
       (,)
+        "wasm32-wasi-ghc-gmp-aarch64-darwin"
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitHubArtifact
+                { ownerRepo = "tweag/ghc-wasm-bindists",
+                  branch = "main",
+                  workflowName = "ghc-wasm-darwin-bindist",
+                  artifactName = "ghc-wasm-aarch64-darwin-bindist"
+                }
+          },
+      (,)
+        "wasm32-wasi-ghc-gmp-x86_64-darwin"
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitHubArtifact
+                { ownerRepo = "tweag/ghc-wasm-bindists",
+                  branch = "main",
+                  workflowName = "ghc-wasm-darwin-bindist",
+                  artifactName = "ghc-wasm-x86_64-darwin-bindist"
+                }
+          },
+      (,)
         "wasi-sdk"
         BindistInfo
           { isGhcBindist = False,
