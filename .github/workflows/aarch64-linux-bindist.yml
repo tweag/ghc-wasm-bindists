@@ -1,0 +1,69 @@
+name: ghc-wasm-aarch64-linux-bindist
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/aarch64-linux-bindist.yml
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 0'
+
+jobs:
+  ghc-wasm-aarch64-linux-bindist:
+    name: ghc-wasm-aarch64-linux-bindist
+    runs-on: makima
+    steps:
+
+      - name: update-system-deps
+        run: |
+          sudo dnf upgrade -y
+
+      - name: setup-haskell
+        uses: haskell-actions/setup@v2
+
+      - name: setup-cabal-deps
+        run: |
+          cabal install \
+            --overwrite-policy=always \
+            alex \
+            happy
+
+      - name: setup-ghc-wasm-meta
+        run: |
+          curl https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/raw/master/bootstrap.sh | PREFIX=${{ runner.temp }}/.ghc-wasm SKIP_GHC=1 sh
+          ${{ runner.temp }}/.ghc-wasm/add_to_github_path.sh
+
+      - name: build-hadrian
+        working-directory: ${{ runner.temp }}
+        run: |
+          git clone --depth=1 --recurse-submodules --shallow-submodules --jobs 32 https://gitlab.haskell.org/ghc/ghc.git
+          cd ghc
+          ./hadrian/build --version
+
+      - name: configure-ghc
+        working-directory: ${{ runner.temp }}/ghc
+        run: |
+          ./boot
+          ./configure $CONFIGURE_ARGS
+
+      - name: build-ghc
+        working-directory: ${{ runner.temp }}/ghc
+        run: |
+          hadrian/build --no-color --no-progress --no-time --flavour=perf --hash-unit-ids --docs=none -j binary-dist-dir test:all_deps _build/stage0/bin/wasm32-wasi-{haddock,hpc,runghc}
+
+      - name: build-bindist
+        working-directory: ${{ runner.temp }}/ghc
+        run: |
+          BINDIST_NAME=$(basename _build/bindist/*)
+          gtar --sort=name --mtime="@$(git log -1 --pretty=%ct)" --owner=0 --group=0 --numeric-owner --use-compress-program="zstd --ultra -22 --threads=0" -cf _build/bindist/$BINDIST_NAME.tar.zst -C _build/bindist $BINDIST_NAME
+
+      - name: upload-bindist
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghc-wasm-aarch64-linux-bindist
+          path: ${{ runner.temp }}/ghc/_build/bindist/*.tar.zst
+
+      - name: test-ghc
+        working-directory: ${{ runner.temp }}/ghc
+        run: |
+          hadrian/build --no-color --no-progress --no-time --flavour=perf --hash-unit-ids --docs=none -j test
