@@ -296,6 +296,18 @@ bindistInfos =
                 }
           },
       (,)
+        "wasm32-wasi-ghc-gmp-aarch64-linux"
+        BindistInfo
+          { isGhcBindist = False,
+            src =
+              GitHubArtifact
+                { ownerRepo = "tweag/ghc-wasm-bindists",
+                  branch = "main",
+                  workflowName = "ghc-wasm-aarch64-linux-bindist",
+                  artifactName = "ghc-wasm-aarch64-linux-bindist"
+                }
+          },
+      (,)
         "wasi-sdk"
         BindistInfo
           { isGhcBindist = False,
