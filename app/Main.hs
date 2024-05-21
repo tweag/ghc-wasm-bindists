@@ -1,5 +1,6 @@
 module Main where
 
+import Codec.Archive.Zip.Conduit.UnZip qualified as UnZip
 import Conduit
 import Control.Lens
 import Crypto.Hash.SHA256 qualified as SHA256
@@ -10,6 +11,7 @@ import Data.ByteString.Base64 (encodeBase64)
 import Data.ByteString.Lazy qualified as BL
 import Data.Conduit.Lzma qualified as Lzma
 import Data.Conduit.Tar qualified as Tar
+import Data.Conduit.Zstd qualified as Zstd
 import Data.Map.Merge.Strict qualified as Map
 import Data.Map.Strict qualified as Map
 import Data.Text qualified as T
@@ -84,38 +86,96 @@ updateStoredBindists mgr cli bindistDir =
             _ -> do
               putTextLn "updating"
               createDirectoryIfMissing True bindistDir
-              let fileName = fileNameFor originalUrl
-              req <- HTTP.parseUrlThrow (toString originalUrl)
-              (sha256, ghcSubdir) <- runConduitRes do
-                res <- lift $ HTTP.http req mgr
-                HTTP.responseBody res .| getZipSink do
-                  ZipSink $ sinkFile (bindistDir </> toString fileName)
-                  sha256 <- ZipSink sinkSha256
-                  ghcSubdir <-
-                    if bindistInfo.isGhcBindist
-                      then ZipSink do
-                        Just fi <- Lzma.decompress Nothing .| Tar.untar yield .| headC
-                        pure $ Just $ T.takeWhile (/= '/') $ decodeUtf8 $ Tar.filePath fi
-                      else pure Nothing
-                  pure (sha256, ghcSubdir)
+              (fileName, sha256, ghcSubdir) <-
+                download
+                  mgr
+                  bindistInfo.dlArgs
+                  originalUrl
+                  bindistDir
+                  (toString bindistName)
               pure
                 StoredBindist
-                  { mirrorUrl = cli.downloadUrlPrefix <> fileName,
+                  { mirrorUrl = cli.downloadUrlPrefix <> toText fileName,
                     originalUrl = originalUrl,
                     sriHash = "sha256-" <> encodeBase64 sha256,
                     ghcSubdir
                   }
       | otherwise = pure prevBindist
+
+download ::
+  HTTP.Manager ->
+  DownloadArgs ->
+  Url ->
+  -- | Target directory.
+  FilePath ->
+  -- | Identifier (used as the file base name).
+  String ->
+  -- | The file name, SHA256 hash, and the GHC bindist subdir name (if
+  -- applicable).
+  IO (FilePath, ByteString, Maybe Text)
+download mgr dlArgs url dir basename = runConduitRes do
+  req <- HTTP.parseUrlThrow (toString url)
+  res <- lift $ HTTP.http req mgr
+  (ext, (sha256, ghcSubdir)) <-
+    HTTP.responseBody res .| (fuseBoth preprocess . getZipSink) do
+      ZipSink $ sinkFile initialFile
+      sha256 <- ZipSink sinkSha256
+      ghcSubdir <- case dlArgs.isGhcBindist of
+        Just compressionFormat -> ZipSink do
+          let decompress = case compressionFormat of
+                Lzma -> Lzma.decompress Nothing
+                Zstd -> Zstd.decompress
+          Just fi <- decompress .| Tar.untar yield .| headC
+          pure $ Just $ T.takeWhile (/= '/') $ decodeUtf8 $ Tar.filePath fi
+        Nothing -> pure Nothing
+      pure (sha256, ghcSubdir)
+  let actualFileName = addExtension basename ext
+  renameFile initialFile (dir </> actualFileName)
+  pure (actualFileName, sha256, ghcSubdir)
+  where
+    initialFile = dir </> basename
+
+    sinkSha256 = SHA256.finalize <$> foldlC SHA256.update SHA256.init
+
+    -- Preprocess, and return the file extension to use.
+    preprocess :: ConduitT ByteString ByteString (ResourceT IO) String
+    preprocess
+      | dlArgs.isSingleEntryZip =
+          void UnZip.unZipStream .| do
+            Just (Left UnZip.ZipEntry {zipEntryName}) <- await
+            concatC
+            let fileName = either toString decodeUtf8 zipEntryName
+            pure $ takeAtMostTwoExtensions fileName
+      | otherwise = do
+          awaitForever yield
+          pure $ takeAtMostTwoExtensions $ toString url
       where
-        sinkSha256 = SHA256.finalize <$> foldlC SHA256.update SHA256.init
-        fileNameFor url = bindistName <> urlExt
+        takeAtMostTwoExtensions p = takeExtension p' <> ext1
           where
-            urlExt = T.dropWhile (/= '.') . T.takeWhileEnd (/= '/') $ url
+            (p', ext1) = splitExtension p
 
 data BindistInfo = BindistInfo
-  { isGhcBindist :: Bool,
+  { dlArgs :: DownloadArgs,
     src :: BindistSrc
   }
+  deriving stock (Show)
+
+data DownloadArgs = DownloadArgs
+  { -- | If 'True: unpack the ZIP file.
+    isSingleEntryZip :: Bool,
+    -- | Used to extract the GHC bindist subdir for metadata.
+    isGhcBindist :: Maybe CompressionFormat
+  }
+  deriving stock (Show)
+
+rawFileDownloadArgs :: DownloadArgs
+rawFileDownloadArgs =
+  DownloadArgs
+    { isSingleEntryZip = False,
+      isGhcBindist = Nothing
+    }
+
+data CompressionFormat = Lzma | Zstd
   deriving stock (Show)
 
 -- get the latest version of a bindist
@@ -190,7 +250,7 @@ bindistInfos =
     [ (,)
         "wasm32-wasi-ghc-gmp"
         BindistInfo
-          { isGhcBindist = True,
+          { dlArgs = rawFileDownloadArgs {isGhcBindist = Just Lzma},
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -204,7 +264,7 @@ bindistInfos =
       (,)
         "wasm32-wasi-ghc-native"
         BindistInfo
-          { isGhcBindist = True,
+          { dlArgs = rawFileDownloadArgs {isGhcBindist = Just Lzma},
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -218,7 +278,7 @@ bindistInfos =
       (,)
         "wasm32-wasi-ghc-unreg"
         BindistInfo
-          { isGhcBindist = True,
+          { dlArgs = rawFileDownloadArgs {isGhcBindist = Just Lzma},
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -232,7 +292,7 @@ bindistInfos =
       (,)
         "wasm32-wasi-ghc-9.6"
         BindistInfo
-          { isGhcBindist = True,
+          { dlArgs = rawFileDownloadArgs {isGhcBindist = Just Lzma},
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -246,7 +306,7 @@ bindistInfos =
       (,)
         "wasm32-wasi-ghc-9.8"
         BindistInfo
-          { isGhcBindist = True,
+          { dlArgs = rawFileDownloadArgs {isGhcBindist = Just Lzma},
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -260,7 +320,7 @@ bindistInfos =
       (,)
         "wasm32-wasi-ghc-9.10"
         BindistInfo
-          { isGhcBindist = True,
+          { dlArgs = rawFileDownloadArgs {isGhcBindist = Just Lzma},
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -274,7 +334,7 @@ bindistInfos =
       (,)
         "wasm32-wasi-ghc-gmp-aarch64-darwin"
         BindistInfo
-          { isGhcBindist = False,
+          { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
             src =
               GitHubArtifact
                 { ownerRepo = "tweag/ghc-wasm-bindists",
@@ -286,7 +346,7 @@ bindistInfos =
       (,)
         "wasm32-wasi-ghc-gmp-x86_64-darwin"
         BindistInfo
-          { isGhcBindist = False,
+          { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
             src =
               GitHubArtifact
                 { ownerRepo = "tweag/ghc-wasm-bindists",
@@ -298,7 +358,7 @@ bindistInfos =
       (,)
         "wasm32-wasi-ghc-gmp-aarch64-linux"
         BindistInfo
-          { isGhcBindist = False,
+          { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
             src =
               GitHubArtifact
                 { ownerRepo = "tweag/ghc-wasm-bindists",
@@ -310,7 +370,7 @@ bindistInfos =
       (,)
         "wasi-sdk"
         BindistInfo
-          { isGhcBindist = False,
+          { dlArgs = rawFileDownloadArgs,
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -324,7 +384,7 @@ bindistInfos =
       (,)
         "wasi-sdk-darwin"
         BindistInfo
-          { isGhcBindist = False,
+          { dlArgs = rawFileDownloadArgs,
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -338,7 +398,7 @@ bindistInfos =
       (,)
         "wasi-sdk-aarch64-linux"
         BindistInfo
-          { isGhcBindist = False,
+          { dlArgs = rawFileDownloadArgs,
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -352,7 +412,7 @@ bindistInfos =
       (,)
         "libffi-wasm"
         BindistInfo
-          { isGhcBindist = False,
+          { dlArgs = rawFileDownloadArgs,
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
@@ -366,7 +426,7 @@ bindistInfos =
       (,)
         "proot"
         BindistInfo
-          { isGhcBindist = False,
+          { dlArgs = rawFileDownloadArgs,
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.com",

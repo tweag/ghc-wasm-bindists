@@ -10,6 +10,7 @@ executable ghc-wasm-bindists
     , base
     , base64
     , conduit
+    , conduit-zstd
     , containers
     , cryptohash-sha256
     , deriving-aeson
@@ -23,8 +24,9 @@ executable ghc-wasm-bindists
     , relude
     , tar-conduit
     , unliftio
+    , zip-stream
   mixins: base hiding (Prelude), relude (Relude as Prelude), relude
   hs-source-dirs: app
   default-language: GHC2021
-  default-extensions: ApplicativeDo BlockArguments DataKinds DeriveAnyClass DeriveGeneric DerivingStrategies DerivingVia DuplicateRecordFields LambdaCase NoFieldSelectors OverloadedLabels OverloadedRecordDot OverloadedStrings RecordWildCards StrictData
+  default-extensions: ApplicativeDo BlockArguments DataKinds DeriveAnyClass DeriveGeneric DerivingStrategies DerivingVia DuplicateRecordFields LambdaCase NoFieldSelectors OverloadedLabels OverloadedRecordDot OverloadedStrings RecordWildCards StrictData ViewPatterns
   ghc-options: -Wall -Werror -Wunused-packages -Wwarn=unused-packages -Wno-name-shadowing
