@@ -49,7 +49,7 @@ jobs:
       - name: build-ghc
         working-directory: ${{ runner.temp }}/ghc
         run: |
-          hadrian/build --no-color --no-progress --no-time --flavour=perf --hash-unit-ids --docs=none -j binary-dist-dir test:all_deps _build/stage0/bin/wasm32-wasi-{haddock,hpc,runghc}
+          hadrian/build --no-color --no-progress --no-time --flavour=perf+text_simdutf --hash-unit-ids --docs=none -j binary-dist-dir test:all_deps _build/stage0/bin/wasm32-wasi-{haddock,hpc,runghc}
 
       - name: build-bindist
         working-directory: ${{ runner.temp }}/ghc
@@ -66,4 +66,4 @@ jobs:
       - name: test-ghc
         working-directory: ${{ runner.temp }}/ghc
         run: |
-          hadrian/build --no-color --no-progress --no-time --flavour=perf --hash-unit-ids --docs=none -j test
+          hadrian/build --no-color --no-progress --no-time --flavour=perf+text_simdutf --hash-unit-ids --docs=none -j test
