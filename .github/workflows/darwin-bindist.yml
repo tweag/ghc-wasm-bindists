@@ -48,7 +48,7 @@ jobs:
       - name: build-hadrian
         working-directory: ${{ runner.temp }}
         run: |
-          git clone --depth=1 --recurse-submodules --shallow-submodules --jobs 32 https://gitlab.haskell.org/ghc/ghc.git
+          git clone --depth=1 --recurse-submodules --shallow-submodules --jobs 32 https://gitlab.haskell.org/ghc/ghc.git -b wip/bump-T7653
           cd ghc
           ./hadrian/build --version
 
