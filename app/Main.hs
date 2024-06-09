@@ -256,8 +256,8 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1,
                   ref = "master",
-                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static+text_simdutf",
+                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static+text_simdutf.tar.xz",
                   pipelineFilter = [("source", Just "schedule")]
                 }
           },
@@ -270,8 +270,8 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1,
                   ref = "master",
-                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-int_native-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-int_native-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-int_native-cross_wasm32-wasi-release+fully_static+text_simdutf",
+                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-int_native-cross_wasm32-wasi-release+fully_static+text_simdutf.tar.xz",
                   pipelineFilter = [("source", Just "schedule")]
                 }
           },
@@ -284,8 +284,8 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1,
                   ref = "master",
-                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-unreg-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-unreg-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-unreg-cross_wasm32-wasi-release+fully_static+text_simdutf",
+                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-unreg-cross_wasm32-wasi-release+fully_static+text_simdutf.tar.xz",
                   pipelineFilter = [("source", Just "schedule")]
                 }
           },
