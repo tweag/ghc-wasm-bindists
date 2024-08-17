@@ -377,12 +377,12 @@ bindistInfos =
                   projectId = 3212,
                   ref = "master",
                   jobName = "x86_64-linux",
-                  artifactPath = "dist/wasi-sdk-22-linux.tar.gz",
+                  artifactPath = "dist/wasi-sdk-25.0-x86_64-linux.tar.gz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
       (,)
-        "wasi-sdk-darwin"
+        "wasi-sdk-aarch64-darwin"
         BindistInfo
           { dlArgs = rawFileDownloadArgs,
             src =
@@ -390,8 +390,22 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 3212,
                   ref = "master",
-                  jobName = "darwin",
-                  artifactPath = "dist/wasi-sdk-22-macos.tar.gz",
+                  jobName = "aarch64-darwin",
+                  artifactPath = "dist/wasi-sdk-25.0-arm64-macos.tar.gz",
+                  pipelineFilter = [("status", Just "success")]
+                }
+          },
+      (,)
+        "wasi-sdk-x86_64-darwin"
+        BindistInfo
+          { dlArgs = rawFileDownloadArgs,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 3212,
+                  ref = "master",
+                  jobName = "x86_64-darwin",
+                  artifactPath = "dist/wasi-sdk-25.0-arm64-macos.tar.gz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
@@ -405,7 +419,7 @@ bindistInfos =
                   projectId = 3212,
                   ref = "master",
                   jobName = "aarch64-linux",
-                  artifactPath = "dist/wasi-sdk-22-linux.tar.gz",
+                  artifactPath = "dist/wasi-sdk-25.0-aarch64-linux.tar.gz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
