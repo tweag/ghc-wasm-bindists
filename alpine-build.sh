@@ -43,18 +43,18 @@ cabal update
 
 cabal install \
   alex \
-  happy
+  happy-1.20.1.1
 
 ./boot
 
 ./configure --host="$(uname -m)-alpine-linux" --target=wasm32-wasi --with-intree-gmp --with-system-libffi
 
-hadrian/build --no-color --no-progress --no-time --flavour=perf+fully_static+text_simdutf --hash-unit-ids --docs=none -j binary-dist-dir test:all_deps
+hadrian/build --no-color --no-progress --no-time --flavour=release+fully_static+text_simdutf --docs=none -j binary-dist-dir test:all_deps
 
 BINDIST_NAME=$(basename _build/bindist/*)
 
 tar --sort=name --mtime="@$(git log -1 --pretty=%ct)" --owner=0 --group=0 --numeric-owner --use-compress-program="zstd --ultra -22 --threads=0" -cf /workspace/$BINDIST_NAME.tar.zst -C _build/bindist $BINDIST_NAME
 
-hadrian/build --no-color --no-progress --no-time --flavour=perf+fully_static+text_simdutf --hash-unit-ids --docs=none -j test
+hadrian/build --no-color --no-progress --no-time --flavour=release+fully_static+text_simdutf --docs=none -j test
 
 cd "$OLDPWD"

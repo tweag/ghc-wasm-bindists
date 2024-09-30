@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/aarch64-linux-bindist.yml
+      - alpine-build.sh
   workflow_dispatch:
   schedule:
     - cron: '0 6 * * 0'

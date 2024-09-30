@@ -16,16 +16,16 @@ jobs:
       matrix:
         include:
           - arch: aarch64
-            os: macos-latest
+            os: macos-14
           - arch: x86_64
-            os: macos-latest-large
+            os: macos-14-large
     env:
-      MACOSX_DEPLOYMENT_TARGET: "11.0"
+      MACOSX_DEPLOYMENT_TARGET: "12.0"
     steps:
 
       - name: setup-xcode
         run: |
-          sudo xcode-select --switch /Applications/Xcode_15.4.app
+          sudo xcode-select --switch /Applications/Xcode_16.1.app
 
       - name: setup-brew-deps
         run: |
@@ -38,7 +38,7 @@ jobs:
         run: |
           cabal install \
             alex \
-            happy
+            happy-1.20.1.1
 
       - name: setup-ghc-wasm-meta
         run: |
@@ -61,7 +61,7 @@ jobs:
       - name: build-ghc
         working-directory: ${{ runner.temp }}/ghc
         run: |
-          hadrian/build --no-color --no-progress --no-time --flavour=perf+text_simdutf --hash-unit-ids --docs=none -j binary-dist-dir test:all_deps _build/stage0/bin/wasm32-wasi-{haddock,hpc,runghc}
+          hadrian/build --no-color --no-progress --no-time --flavour=release+text_simdutf --docs=none -j binary-dist-dir test:all_deps _build/stage0/bin/wasm32-wasi-{haddock,hpc,runghc}
 
       - name: build-bindist
         working-directory: ${{ runner.temp }}/ghc
@@ -78,4 +78,4 @@ jobs:
       - name: test-ghc
         working-directory: ${{ runner.temp }}/ghc
         run: |
-          hadrian/build --no-color --no-progress --no-time --flavour=perf+text_simdutf --hash-unit-ids --docs=none -j test
+          hadrian/build --no-color --no-progress --no-time --flavour=release+text_simdutf --docs=none -j test
