@@ -378,7 +378,7 @@ bindistInfos =
                   ref = "master",
                   jobName = "x86_64-linux",
                   artifactPath = "dist/wasi-sdk-25.0-x86_64-linux.tar.gz",
-                  pipelineFilter = [("status", Just "success")]
+                  pipelineFilter = []
                 }
           },
       (,)
@@ -391,8 +391,8 @@ bindistInfos =
                   projectId = 3212,
                   ref = "master",
                   jobName = "aarch64-darwin",
-                  artifactPath = "dist/wasi-sdk-25.0-x86_64-macos.tar.gz",
-                  pipelineFilter = [("status", Just "success")]
+                  artifactPath = "dist/wasi-sdk-25.0-arm64-macos.tar.gz",
+                  pipelineFilter = []
                 }
           },
       (,)
@@ -406,7 +406,7 @@ bindistInfos =
                   ref = "master",
                   jobName = "x86_64-darwin",
                   artifactPath = "dist/wasi-sdk-25.0-x86_64-macos.tar.gz",
-                  pipelineFilter = [("status", Just "success")]
+                  pipelineFilter = []
                 }
           },
       (,)
@@ -420,7 +420,7 @@ bindistInfos =
                   ref = "master",
                   jobName = "aarch64-linux",
                   artifactPath = "dist/wasi-sdk-25.0-aarch64-linux.tar.gz",
-                  pipelineFilter = [("status", Just "success")]
+                  pipelineFilter = []
                 }
           },
       (,)
