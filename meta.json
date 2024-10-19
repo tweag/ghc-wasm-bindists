@@ -4,6 +4,26 @@
         "originalUrl": "https://nightly.link/type-dance/binaryen/actions/artifacts/705553138.zip",
         "sriHash": "sha256-JyhJ94WWyR+xoCRvJ7RAbzh22yV8g6Xetr1DSwJD2fI="
     },
+    "cabal": {
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241019T164140/cabal.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/1164/jobs/1997392/artifacts/out/cabal-install-3.15.0.0-x86_64-linux-alpine3_18.tar.xz",
+        "sriHash": "sha256-uHo6lc9K8B837N7cYu/tqHUgcB+NUsgbo2iKY4Abk5w="
+    },
+    "cabal-aarch64-darwin": {
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241019T164140/cabal-aarch64-darwin.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/1164/jobs/1997398/artifacts/out/cabal-install-3.15.0.0-aarch64-darwin.tar.xz",
+        "sriHash": "sha256-BxO8GuVY7RXxV2OvOoj/uD5NvnOH4HjosM1SdR4ClI4="
+    },
+    "cabal-aarch64-linux": {
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241019T164140/cabal-aarch64-linux.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/1164/jobs/1997394/artifacts/out/cabal-install-3.15.0.0-aarch64-linux-alpine3_18.tar.xz",
+        "sriHash": "sha256-RGFMnf9H3hvFBwEvdaTE0BSgV6AGDiQiBYC9zwVecQo="
+    },
+    "cabal-x86_64-darwin": {
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241019T164140/cabal-x86_64-darwin.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/1164/jobs/1997396/artifacts/out/cabal-install-3.15.0.0-x86_64-darwin.tar.xz",
+        "sriHash": "sha256-FZKv9HZE30Tg5+LLVbzjWnQ698t6vIveExnATfCLPBU="
+    },
     "libffi-wasm": {
         "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20240930T111148/libffi-wasm",
         "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3214/jobs/1993801/artifacts/",
