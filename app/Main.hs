@@ -214,7 +214,7 @@ getLatestBindistURL mgr = \case
         apiRes <-
           fetch
             (pipelineUrl <> "/" <> show pipelineId <> "/jobs")
-            [("per_page", Just "100"), ("scope", Just "success")]
+            [("per_page", Just "100")]
         let hasJobName = filteredBy $ key "name" . _String . only jobName
             jobId = apiRes ^? values . hasJobName . key "id" . _Integer
         pure $ downloadUrlForJobId <$> jobId
@@ -256,8 +256,8 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1,
                   ref = "master",
-                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static+text_simdutf",
-                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static+text_simdutf.tar.xz",
+                  jobName = "nightly-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static+text_simdutf",
+                  artifactPath = "ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static+text_simdutf.tar.xz",
                   pipelineFilter = [("source", Just "schedule")]
                 }
           },
@@ -270,8 +270,8 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1,
                   ref = "master",
-                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-int_native-cross_wasm32-wasi-release+fully_static+text_simdutf",
-                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-int_native-cross_wasm32-wasi-release+fully_static+text_simdutf.tar.xz",
+                  jobName = "nightly-x86_64-linux-alpine3_20-wasm-int_native-cross_wasm32-wasi-release+host_fully_static+text_simdutf",
+                  artifactPath = "ghc-x86_64-linux-alpine3_20-wasm-int_native-cross_wasm32-wasi-release+host_fully_static+text_simdutf.tar.xz",
                   pipelineFilter = [("source", Just "schedule")]
                 }
           },
@@ -284,8 +284,8 @@ bindistInfos =
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1,
                   ref = "master",
-                  jobName = "nightly-x86_64-linux-alpine3_18-wasm-unreg-cross_wasm32-wasi-release+fully_static+text_simdutf",
-                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-unreg-cross_wasm32-wasi-release+fully_static+text_simdutf.tar.xz",
+                  jobName = "nightly-x86_64-linux-alpine3_20-wasm-unreg-cross_wasm32-wasi-release+host_fully_static+text_simdutf",
+                  artifactPath = "ghc-x86_64-linux-alpine3_20-wasm-unreg-cross_wasm32-wasi-release+host_fully_static+text_simdutf.tar.xz",
                   pipelineFilter = [("source", Just "schedule")]
                 }
           },
@@ -296,10 +296,10 @@ bindistInfos =
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
-                  projectId = 3223,
+                  projectId = 224,
                   ref = "ghc-9.6",
-                  jobName = "x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  jobName = "x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static.tar.xz",
                   pipelineFilter = []
                 }
           },
@@ -310,10 +310,10 @@ bindistInfos =
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
-                  projectId = 3223,
+                  projectId = 224,
                   ref = "ghc-9.8",
-                  jobName = "x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
+                  jobName = "x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static.tar.xz",
                   pipelineFilter = []
                 }
           },
@@ -324,11 +324,25 @@ bindistInfos =
             src =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
-                  projectId = 1,
+                  projectId = 224,
                   ref = "ghc-9.10",
-                  jobName = "x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static",
-                  artifactPath = "ghc-x86_64-linux-alpine3_18-wasm-cross_wasm32-wasi-release+fully_static.tar.xz",
-                  pipelineFilter = [] -- [("status", Just "success")]
+                  jobName = "x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static",
+                  artifactPath = "ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static.tar.xz",
+                  pipelineFilter = []
+                }
+          },
+      (,)
+        "wasm32-wasi-ghc-9.12"
+        BindistInfo
+          { dlArgs = rawFileDownloadArgs {isGhcBindist = Just Lzma},
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 224,
+                  ref = "ghc-9.12",
+                  jobName = "x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static+text_simdutf",
+                  artifactPath = "ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static+text_simdutf.tar.xz",
+                  pipelineFilter = []
                 }
           },
       (,)
@@ -449,6 +463,62 @@ bindistInfos =
                   jobName = "dist",
                   artifactPath = "dist/proot",
                   pipelineFilter = []
+                }
+          },
+      (,)
+        "cabal"
+        BindistInfo
+          { dlArgs = rawFileDownloadArgs,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1164,
+                  ref = "cabal-head",
+                  jobName = "alpine-linux: [x86_64, alpine3_18, x86_64-linux]",
+                  artifactPath = "out/cabal-install-3.15.0.0-x86_64-linux-alpine3_18.tar.xz",
+                  pipelineFilter = [("status", Just "success")]
+                }
+          },
+      (,)
+        "cabal-aarch64-linux"
+        BindistInfo
+          { dlArgs = rawFileDownloadArgs,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1164,
+                  ref = "cabal-head",
+                  jobName = "alpine-linux: [aarch64, alpine3_18, aarch64-linux]",
+                  artifactPath = "out/cabal-install-3.15.0.0-aarch64-linux-alpine3_18.tar.xz",
+                  pipelineFilter = [("status", Just "success")]
+                }
+          },
+      (,)
+        "cabal-aarch64-darwin"
+        BindistInfo
+          { dlArgs = rawFileDownloadArgs,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1164,
+                  ref = "cabal-head",
+                  jobName = "darwin: [aarch64, arm64]",
+                  artifactPath = "out/cabal-install-3.15.0.0-aarch64-darwin.tar.xz",
+                  pipelineFilter = [("status", Just "success")]
+                }
+          },
+      (,)
+        "cabal-x86_64-darwin"
+        BindistInfo
+          { dlArgs = rawFileDownloadArgs,
+            src =
+              GitLabArtifact
+                { gitlabDomain = "gitlab.haskell.org",
+                  projectId = 1164,
+                  ref = "cabal-head",
+                  jobName = "darwin: [x86_64, x86_64]",
+                  artifactPath = "out/cabal-install-3.15.0.0-x86_64-darwin.tar.xz",
+                  pipelineFilter = [("status", Just "success")]
                 }
           }
     ]
