@@ -14,6 +14,7 @@ apk add \
   coreutils \
   ghc \
   jq \
+  ncurses-static \
   nodejs \
   python3 \
   xz \
@@ -35,7 +36,7 @@ cd "$OLDPWD"
 
 cd "$(mktemp -d)"
 
-git clone --depth=1 --recurse-submodules --shallow-submodules --jobs 32 https://gitlab.haskell.org/ghc/ghc.git .
+git clone --ref-format=reftable --depth=1 --recurse-submodules --shallow-submodules --jobs 32 https://gitlab.haskell.org/ghc/ghc.git .
 
 cabal update
 
@@ -43,18 +44,18 @@ cabal update
 
 cabal install \
   alex \
-  happy-1.20.1.1
+  happy
 
 ./boot
 
 ./configure --host="$(uname -m)-alpine-linux" --target=wasm32-wasi --with-intree-gmp --with-system-libffi
 
-hadrian/build --no-color --no-progress --no-time --flavour=release+fully_static+text_simdutf --docs=none -j binary-dist-dir test:all_deps
+hadrian/build --no-color --no-progress --no-time --flavour=release+host_fully_static+text_simdutf --docs=none -j binary-dist-dir test:all_deps
 
 BINDIST_NAME=$(basename _build/bindist/*)
 
 tar --sort=name --mtime="@$(git log -1 --pretty=%ct)" --owner=0 --group=0 --numeric-owner --use-compress-program="zstd --ultra -22 --threads=0" -cf /workspace/$BINDIST_NAME.tar.zst -C _build/bindist $BINDIST_NAME
 
-hadrian/build --no-color --no-progress --no-time --flavour=release+fully_static+text_simdutf --docs=none -j test
+hadrian/build --no-color --no-progress --no-time --flavour=release+host_fully_static+text_simdutf --docs=none -j test
 
 cd "$OLDPWD"
