@@ -16,11 +16,11 @@ jobs:
       matrix:
         include:
           - arch: aarch64
-            os: macos-14
+            os: macos-15
           - arch: x86_64
-            os: macos-14-large
+            os: macos-15-large
     env:
-      MACOSX_DEPLOYMENT_TARGET: "12.0"
+      MACOSX_DEPLOYMENT_TARGET: "13.0"
     steps:
 
       - name: setup-xcode
@@ -38,7 +38,7 @@ jobs:
         run: |
           cabal install \
             alex \
-            happy-1.20.1.1
+            happy
 
       - name: setup-ghc-wasm-meta
         run: |
@@ -48,7 +48,7 @@ jobs:
       - name: build-hadrian
         working-directory: ${{ runner.temp }}
         run: |
-          git clone --depth=1 --recurse-submodules --shallow-submodules --jobs 32 https://gitlab.haskell.org/ghc/ghc.git
+          git clone --ref-format=reftable --depth=1 --recurse-submodules --shallow-submodules --jobs 32 https://gitlab.haskell.org/ghc/ghc.git
           cd ghc
           ./hadrian/build --version
 
