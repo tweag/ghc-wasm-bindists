@@ -90,22 +90,22 @@
         "sriHash": "sha256-EHGmksV2KlhFYDh/PL8JGJ4jv7XCmKHVW+7u6K5RXTc="
     },
     "wasm32-wasi-ghc-gmp-aarch64-darwin": {
-        "ghcSubdir": "ghc-9.13.20241019-wasm32-wasi",
-        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241020T011334/wasm32-wasi-ghc-gmp-aarch64-darwin.tar.zst",
-        "originalUrl": "https://nightly.link/tweag/ghc-wasm-bindists/actions/artifacts/2078254875.zip",
-        "sriHash": "sha256-9NStM42Jr2/w5oI88xtqzw/lH6tCR7K2algif3uzHYQ="
+        "ghcSubdir": "ghc-9.13.20241021-wasm32-wasi",
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241021T133651/wasm32-wasi-ghc-gmp-aarch64-darwin.tar.zst",
+        "originalUrl": "https://nightly.link/tweag/ghc-wasm-bindists/actions/artifacts/2082083089.zip",
+        "sriHash": "sha256-vrMiPTMPZofxk/9cRk7L9ZGk9VOfMFWKpgoSD5kFZZE="
     },
     "wasm32-wasi-ghc-gmp-aarch64-linux": {
-        "ghcSubdir": "ghc-9.13.20241019-wasm32-wasi",
-        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241020T011334/wasm32-wasi-ghc-gmp-aarch64-linux.tar.zst",
-        "originalUrl": "https://nightly.link/tweag/ghc-wasm-bindists/actions/artifacts/2078247919.zip",
-        "sriHash": "sha256-MZszi8+12s9y5nfsuMPyC28nQghv7eSLrWR23MwiCPk="
+        "ghcSubdir": "ghc-9.13.20241021-wasm32-wasi",
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241021T133651/wasm32-wasi-ghc-gmp-aarch64-linux.tar.zst",
+        "originalUrl": "https://nightly.link/tweag/ghc-wasm-bindists/actions/artifacts/2081986778.zip",
+        "sriHash": "sha256-p3JWdtsHPMCZBFF9M4a36N4yqXU8lSb+ep4uQf1mLxw="
     },
     "wasm32-wasi-ghc-gmp-x86_64-darwin": {
-        "ghcSubdir": "ghc-9.13.20241019-wasm32-wasi",
-        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241020T011334/wasm32-wasi-ghc-gmp-x86_64-darwin.tar.zst",
-        "originalUrl": "https://nightly.link/tweag/ghc-wasm-bindists/actions/artifacts/2078295755.zip",
-        "sriHash": "sha256-i2PIo3a/SgABSyP8fekPQvQqAold6OEvDQxS0grQp/A="
+        "ghcSubdir": "ghc-9.13.20241021-wasm32-wasi",
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241021T133651/wasm32-wasi-ghc-gmp-x86_64-darwin.tar.zst",
+        "originalUrl": "https://nightly.link/tweag/ghc-wasm-bindists/actions/artifacts/2082197381.zip",
+        "sriHash": "sha256-Y5RCAI6sQoyAKPfghH2ks84UGXmGTneSBBThV2e2TAg="
     },
     "wasm32-wasi-ghc-native": {
         "ghcSubdir": "ghc-9.13.20241018-wasm32-wasi",
