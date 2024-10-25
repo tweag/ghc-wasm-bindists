@@ -60,16 +60,16 @@
         "sriHash": "sha256-mJ8rDF3QrztsBsgMhNKid0u6pgIJ2d6Rp7uhf2QoF0c="
     },
     "wasm32-wasi-ghc-9.10": {
-        "ghcSubdir": "ghc-9.10.1.20241021-wasm32-wasi",
-        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241022T075120/wasm32-wasi-ghc-9.10.tar.xz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2017582/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static.tar.xz",
-        "sriHash": "sha256-dLyRON/BIhVkoyWUQ29ON2iHtfLwuGx6P5AtmHRCOfM="
+        "ghcSubdir": "ghc-9.10.1.20241024-wasm32-wasi",
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241025T003014/wasm32-wasi-ghc-9.10.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2020749/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static.tar.xz",
+        "sriHash": "sha256-SUcbomqkl6BqoBP/fp8NYQr7UM/edvFd79GV45gCZDE="
     },
     "wasm32-wasi-ghc-9.12": {
-        "ghcSubdir": "ghc-9.12.20241021-wasm32-wasi",
-        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241022T075120/wasm32-wasi-ghc-9.12.tar.xz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2017639/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static+text_simdutf.tar.xz",
-        "sriHash": "sha256-7+RdX2G8fFuWuW+NraBSObaMazx0XvJBrPPbCKwNmXk="
+        "ghcSubdir": "ghc-9.12.20241024-wasm32-wasi",
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241025T003014/wasm32-wasi-ghc-9.12.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2020787/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static+text_simdutf.tar.xz",
+        "sriHash": "sha256-75AmSPsYTMjMySE0yNoQq/RbIKmrkIq5WEYTZuhA6TM="
     },
     "wasm32-wasi-ghc-9.6": {
         "ghcSubdir": "ghc-9.6.6.20241021-wasm32-wasi",
