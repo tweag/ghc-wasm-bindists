@@ -41,8 +41,8 @@ cabal update
 ./hadrian/build --version
 
 cabal install \
-  alex \
-  happy
+  alex-3.5.1.0 \
+  happy-2.0.2
 
 ./boot
 
