@@ -48,12 +48,12 @@ cabal install \
 
 ./configure --host="$(uname -m)-alpine-linux" --target=wasm32-wasi --with-intree-gmp --with-system-libffi
 
-hadrian/build --no-color --no-progress --no-time --flavour=release+host_fully_static+text_simdutf --docs=none -j binary-dist-dir test:all_deps _build/stage0/bin/wasm32-wasi-haddock _build/stage0/bin/wasm32-wasi-hpc _build/stage0/bin/wasm32-wasi-runghc
+hadrian/build --no-color --no-progress --no-time --flavour=perf+host_fully_static+text_simdutf --docs=none -j binary-dist-dir test:all_deps _build/stage0/bin/wasm32-wasi-haddock _build/stage0/bin/wasm32-wasi-hpc _build/stage0/bin/wasm32-wasi-runghc
 
 BINDIST_NAME=$(basename _build/bindist/*)
 
 tar --sort=name --mtime="@$(git log -1 --pretty=%ct)" --owner=0 --group=0 --numeric-owner --use-compress-program="zstd --ultra -22 --threads=0" -cf /workspace/$BINDIST_NAME.tar.zst -C _build/bindist $BINDIST_NAME
 
-hadrian/build --no-color --no-progress --no-time --flavour=release+host_fully_static+text_simdutf --docs=none -j test
+hadrian/build --no-color --no-progress --no-time --flavour=perf+host_fully_static+text_simdutf --docs=none -j test
 
 cd "$OLDPWD"
