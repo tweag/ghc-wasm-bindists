@@ -60,16 +60,16 @@
         "sriHash": "sha256-mJ8rDF3QrztsBsgMhNKid0u6pgIJ2d6Rp7uhf2QoF0c="
     },
     "wasm32-wasi-ghc-9.10": {
-        "ghcSubdir": "ghc-9.10.1.20241108-wasm32-wasi",
-        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241110T200600/wasm32-wasi-ghc-9.10.tar.xz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2030833/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static.tar.xz",
-        "sriHash": "sha256-6UWeWTl0rcqESZxlra54A7XINUpDwEbVbZtVlQCFeMo="
+        "ghcSubdir": "ghc-9.10.1.20241115-wasm32-wasi",
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241115T133246/wasm32-wasi-ghc-9.10.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2036841/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static.tar.xz",
+        "sriHash": "sha256-CK2H33cJNSucfQEbd34PAi/K0WPkBqizk/4R66DsAOQ="
     },
     "wasm32-wasi-ghc-9.12": {
-        "ghcSubdir": "ghc-9.12.0.20241108-wasm32-wasi",
-        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241110T200600/wasm32-wasi-ghc-9.12.tar.xz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2030795/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static+text_simdutf.tar.xz",
-        "sriHash": "sha256-Ls3OzLLxG4ip4liyOTiM5MVolXU0H54W1wBbbEUcFLA="
+        "ghcSubdir": "ghc-9.12.0.20241115-wasm32-wasi",
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241115T133246/wasm32-wasi-ghc-9.12.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2036879/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static+text_simdutf.tar.xz",
+        "sriHash": "sha256-aXTdiu47A1IKht31hHk24Du/d0me/WgTE6CgbHqfwGY="
     },
     "wasm32-wasi-ghc-9.6": {
         "ghcSubdir": "ghc-9.6.6.20241108-wasm32-wasi",
@@ -78,10 +78,10 @@
         "sriHash": "sha256-a2Gx6foDDyYECNPRVEGlDPrXFRgDWiyoVze7l5mNyWo="
     },
     "wasm32-wasi-ghc-9.8": {
-        "ghcSubdir": "ghc-9.8.3.20241108-wasm32-wasi",
-        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241110T200600/wasm32-wasi-ghc-9.8.tar.xz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2030764/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static.tar.xz",
-        "sriHash": "sha256-IH2QgbJwFhNK2sHrHExjN1ujbQpKFARyNHamQ4qXRmo="
+        "ghcSubdir": "ghc-9.8.4.20241115-wasm32-wasi",
+        "mirrorUrl": "https://github.com/tweag/ghc-wasm-bindists/releases/download/20241115T133246/wasm32-wasi-ghc-9.8.tar.xz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/224/jobs/2036810/artifacts/ghc-x86_64-linux-alpine3_20-wasm-cross_wasm32-wasi-release+host_fully_static.tar.xz",
+        "sriHash": "sha256-55pxRc13ZSTIdHOmMZ6jbOZAJEc/gupFrL7FXnq8DHQ="
     },
     "wasm32-wasi-ghc-gmp": {
         "ghcSubdir": "ghc-9.13.20241108-wasm32-wasi",
