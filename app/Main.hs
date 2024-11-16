@@ -419,7 +419,7 @@ bindistInfos =
                   projectId = 3212,
                   ref = "master",
                   jobName = "x86_64-darwin",
-                  artifactPath = "dist/wasi-sdk-25.0-x86_64-macos.tar.gz",
+                  artifactPath = "dist/wasi-sdk-25.0-arm64-macos.tar.gz",
                   pipelineFilter = []
                 }
           },
