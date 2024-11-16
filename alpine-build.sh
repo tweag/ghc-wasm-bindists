@@ -14,6 +14,7 @@ apk add \
   coreutils \
   ghc \
   jq \
+  musl-locales \
   ncurses-static \
   python3 \
   xz \
@@ -42,7 +43,7 @@ cabal update
 
 cabal install \
   alex-3.5.1.0 \
-  happy-2.0.2
+  happy-1.20.1.1
 
 ./boot
 
