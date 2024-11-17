@@ -354,7 +354,31 @@ bindistInfos =
                 { ownerRepo = "tweag/ghc-wasm-bindists",
                   branch = "main",
                   workflowName = "ghc-wasm-darwin-bindist",
-                  artifactName = "ghc-wasm-aarch64-darwin-bindist"
+                  artifactName = "ghc-wasm-aarch64-darwin-master-bindist"
+                }
+          },
+      (,)
+        "wasm32-wasi-ghc-gmp-aarch64-darwin-9.12"
+        BindistInfo
+          { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
+            src =
+              GitHubArtifact
+                { ownerRepo = "tweag/ghc-wasm-bindists",
+                  branch = "main",
+                  workflowName = "ghc-wasm-darwin-bindist",
+                  artifactName = "ghc-wasm-aarch64-darwin-ghc-9.12-bindist"
+                }
+          },
+      (,)
+        "wasm32-wasi-ghc-gmp-aarch64-darwin-9.10"
+        BindistInfo
+          { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
+            src =
+              GitHubArtifact
+                { ownerRepo = "tweag/ghc-wasm-bindists",
+                  branch = "main",
+                  workflowName = "ghc-wasm-darwin-bindist",
+                  artifactName = "ghc-wasm-aarch64-darwin-ghc-9.10-bindist"
                 }
           },
       (,)
@@ -366,7 +390,7 @@ bindistInfos =
                 { ownerRepo = "tweag/ghc-wasm-bindists",
                   branch = "main",
                   workflowName = "ghc-wasm-darwin-bindist",
-                  artifactName = "ghc-wasm-x86_64-darwin-bindist"
+                  artifactName = "ghc-wasm-x86_64-darwin-master-bindist"
                 }
           },
       (,)
