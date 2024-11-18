@@ -12,8 +12,11 @@ on:
 jobs:
   ghc-wasm-aarch64-darwin-bindist:
     name: ghc-wasm-aarch64-darwin-${{ matrix.branch }}-bindist
-    runs-on: makima
+    runs-on:
+      - ARM64
+      - macOS
     strategy:
+      fail-fast: false
       matrix:
         include:
           - arch: aarch64
@@ -39,8 +42,11 @@ jobs:
         uses: ./.github/actions/darwin-bindist
 
   ghc-wasm-x86_64-darwin-bindist:
+    needs: ghc-wasm-aarch64-darwin-bindist
     name: ghc-wasm-x86_64-darwin-${{ matrix.branch }}-bindist
-    runs-on: macos-15-large
+    runs-on:
+      - X64
+      - macOS
     strategy:
       matrix:
         include:

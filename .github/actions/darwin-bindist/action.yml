@@ -2,10 +2,6 @@ name: ghc-wasm-darwin-bindist
 runs:
   using: composite
   steps:
-    - name: setup-brew-deps
-      shell: bash
-      run: |
-        brew install automake || true
 
     - name: setup-haskell
       uses: haskell-actions/setup@v2
