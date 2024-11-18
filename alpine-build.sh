@@ -10,11 +10,12 @@ apk add \
   autoconf \
   automake \
   bash \
-  cabal \
   coreutils \
-  ghc \
+  curl \
+  gmp-dev \
   jq \
   musl-locales \
+  ncurses-dev \
   ncurses-static \
   python3 \
   xz \
@@ -29,9 +30,11 @@ cd "$OLDPWD"
 export LD_PRELOAD=/usr/lib/libmimalloc.so
 
 cd "$(mktemp -d)"
-curl -f -L --retry 5 https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/raw/master/bootstrap.sh | PREFIX=$PWD SKIP_GHC=1 sh
-. "$PWD/env"
-cd "$OLDPWD"
+curl -f -L --retry 5 https://downloads.haskell.org/ghc/9.10.1/ghc-9.10.1-aarch64-alpine3_18-linux.tar.xz | tar xJ --strip-components=1
+./configure --prefix=$HOME/.local
+make install -j16
+
+curl -f -L --retry 5 https://downloads.haskell.org/cabal/cabal-install-3.12.1.0/cabal-install-3.12.1.0-aarch64-linux-alpine3_18.tar.xz | tar xJ -C ~/.local/bin cabal
 
 cd "$(mktemp -d)"
 
@@ -46,6 +49,11 @@ cabal install \
   happy-1.20.1.1
 
 ./boot
+
+cd "$(mktemp -d)"
+curl -f -L --retry 5 https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/raw/master/bootstrap.sh | PREFIX=$PWD SKIP_GHC=1 sh
+. "$PWD/env"
+cd "$OLDPWD"
 
 ./configure --host="$(uname -m)-alpine-linux" --target=wasm32-wasi --with-intree-gmp --with-system-libffi
 

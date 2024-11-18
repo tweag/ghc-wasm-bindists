@@ -351,7 +351,7 @@ bindistInfos =
           { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
             src =
               GitHubArtifact
-                { ownerRepo = "tweag/ghc-wasm-bindists",
+                { ownerRepo = "haskell-wasm/ghc-wasm-bindists",
                   branch = "main",
                   workflowName = "ghc-wasm-darwin-bindist",
                   artifactName = "ghc-wasm-aarch64-darwin-master-bindist"
@@ -363,7 +363,7 @@ bindistInfos =
           { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
             src =
               GitHubArtifact
-                { ownerRepo = "tweag/ghc-wasm-bindists",
+                { ownerRepo = "haskell-wasm/ghc-wasm-bindists",
                   branch = "main",
                   workflowName = "ghc-wasm-darwin-bindist",
                   artifactName = "ghc-wasm-aarch64-darwin-ghc-9.12-bindist"
@@ -375,7 +375,7 @@ bindistInfos =
           { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
             src =
               GitHubArtifact
-                { ownerRepo = "tweag/ghc-wasm-bindists",
+                { ownerRepo = "haskell-wasm/ghc-wasm-bindists",
                   branch = "main",
                   workflowName = "ghc-wasm-darwin-bindist",
                   artifactName = "ghc-wasm-aarch64-darwin-ghc-9.10-bindist"
@@ -387,7 +387,7 @@ bindistInfos =
           { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
             src =
               GitHubArtifact
-                { ownerRepo = "tweag/ghc-wasm-bindists",
+                { ownerRepo = "haskell-wasm/ghc-wasm-bindists",
                   branch = "main",
                   workflowName = "ghc-wasm-darwin-bindist",
                   artifactName = "ghc-wasm-x86_64-darwin-master-bindist"
@@ -399,7 +399,7 @@ bindistInfos =
           { dlArgs = DownloadArgs {isSingleEntryZip = True, isGhcBindist = Just Zstd},
             src =
               GitHubArtifact
-                { ownerRepo = "tweag/ghc-wasm-bindists",
+                { ownerRepo = "haskell-wasm/ghc-wasm-bindists",
                   branch = "main",
                   workflowName = "ghc-wasm-aarch64-linux-bindist",
                   artifactName = "ghc-wasm-aarch64-linux-bindist"

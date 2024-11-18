@@ -12,7 +12,10 @@ on:
 jobs:
   ghc-wasm-aarch64-linux-bindist:
     name: ghc-wasm-aarch64-linux-bindist
-    runs-on: makima
+    runs-on:
+      - ARM64
+      - Linux
+      - podman
     steps:
 
       - name: checkout
@@ -20,7 +23,7 @@ jobs:
 
       - name: build & test
         run: |
-          docker run \
+          podman run \
             --rm \
             --init \
             --network host \
