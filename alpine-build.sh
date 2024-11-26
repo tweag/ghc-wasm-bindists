@@ -51,7 +51,7 @@ cabal install \
 ./boot
 
 cd "$(mktemp -d)"
-curl -f -L --retry 5 https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/raw/master/bootstrap.sh | PREFIX=$PWD SKIP_GHC=1 sh
+curl -f -L --retry 5 https://gitlab.haskell.org/haskell-wasm/ghc-wasm-meta/-/raw/master/bootstrap.sh | PREFIX=$PWD SKIP_GHC=1 sh
 . "$PWD/env"
 cd "$OLDPWD"
 

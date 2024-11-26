@@ -476,20 +476,6 @@ bindistInfos =
                 }
           },
       (,)
-        "proot"
-        BindistInfo
-          { dlArgs = rawFileDownloadArgs,
-            src =
-              GitLabArtifact
-                { gitlabDomain = "gitlab.com",
-                  projectId = 9799675,
-                  ref = "master",
-                  jobName = "dist",
-                  artifactPath = "dist/proot",
-                  pipelineFilter = []
-                }
-          },
-      (,)
         "cabal"
         BindistInfo
           { dlArgs = rawFileDownloadArgs,

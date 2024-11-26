@@ -25,7 +25,7 @@ runs:
     - name: setup-ghc-wasm-meta
       shell: bash
       run: |
-        curl https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/raw/master/bootstrap.sh | PREFIX=${{ runner.temp }}/.ghc-wasm SKIP_GHC=1 sh
+        curl https://gitlab.haskell.org/haskell-wasm/ghc-wasm-meta/-/raw/master/bootstrap.sh | PREFIX=${{ runner.temp }}/.ghc-wasm SKIP_GHC=1 sh
         ${{ runner.temp }}/.ghc-wasm/add_to_github_path.sh
 
     - name: configure-ghc
