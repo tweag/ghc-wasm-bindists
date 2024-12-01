@@ -9,11 +9,14 @@ on:
       - synchronize
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on:
+      - X64
+      - Linux
+      - ubuntu
     steps:
       - uses: actions/checkout@v4
-      - uses: cachix/install-nix-action@v30
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: DeterminateSystems/nix-installer-action@v16
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Build
         run: nix build -L
       - name: Run from scratch
