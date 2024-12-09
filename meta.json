@@ -25,19 +25,19 @@
         "sriHash": "sha256-nppLAzkiVJNEjYAPtFp2bXSblk7Wr30hqKHY8WTL460="
     },
     "wasi-sdk": {
-        "mirrorUrl": "https://github.com/haskell-wasm/ghc-wasm-bindists/releases/download/20241116T180537/wasi-sdk.tar.gz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3212/jobs/2038354/artifacts/dist/wasi-sdk-25.0-x86_64-linux.tar.gz",
-        "sriHash": "sha256-CXbqGq3RmvbIKWNoYRHewPsrR5x8fJE5G6J+oURgXVM="
+        "mirrorUrl": "https://github.com/haskell-wasm/ghc-wasm-bindists/releases/download/20241209T182201/wasi-sdk.tar.gz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3212/jobs/2058522/artifacts/dist/wasi-sdk-25.0-x86_64-linux.tar.gz",
+        "sriHash": "sha256-UP+yrVnyEPdAT+p8ifX72qxaMysl+hx81SY+EbsAMJQ="
     },
     "wasi-sdk-aarch64-darwin": {
-        "mirrorUrl": "https://github.com/haskell-wasm/ghc-wasm-bindists/releases/download/20241116T180537/wasi-sdk-aarch64-darwin.tar.gz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3212/jobs/2038364/artifacts/dist/wasi-sdk-25.0-arm64-macos.tar.gz",
-        "sriHash": "sha256-zTyVe8ZmRwEGjfFz5JniH3CemR++Fw4uy1MFe/DFCCU="
+        "mirrorUrl": "https://github.com/haskell-wasm/ghc-wasm-bindists/releases/download/20241209T182201/wasi-sdk-aarch64-darwin.tar.gz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3212/jobs/2058529/artifacts/dist/wasi-sdk-25.0-arm64-macos.tar.gz",
+        "sriHash": "sha256-aDEi94i54YfYFD4+H9RHImLIPR6qJFpb5W33F5KpDeM="
     },
     "wasi-sdk-aarch64-linux": {
-        "mirrorUrl": "https://github.com/haskell-wasm/ghc-wasm-bindists/releases/download/20241116T180537/wasi-sdk-aarch64-linux.tar.gz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3212/jobs/2038358/artifacts/dist/wasi-sdk-25.0-aarch64-linux.tar.gz",
-        "sriHash": "sha256-hVhDKP7RU+fdP1Hp7RbrVA2HnLIAc+HZ8LHXgmFGaPw="
+        "mirrorUrl": "https://github.com/haskell-wasm/ghc-wasm-bindists/releases/download/20241209T182201/wasi-sdk-aarch64-linux.tar.gz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3212/jobs/2058528/artifacts/dist/wasi-sdk-25.0-aarch64-linux.tar.gz",
+        "sriHash": "sha256-cy7u0O/98fHE7xjbw4v5VzV4c1QUW14mi5yZuzJwJpI="
     },
     "wasi-sdk-darwin": {
         "mirrorUrl": "https://github.com/haskell-wasm/ghc-wasm-bindists/releases/download/20240616T200528/wasi-sdk-darwin.tar.gz",
@@ -45,9 +45,9 @@
         "sriHash": "sha256-4Fjp7X1H5ZMuYF2cnovvbboeEPkNa19CAc4y3lh8QJY="
     },
     "wasi-sdk-x86_64-darwin": {
-        "mirrorUrl": "https://github.com/haskell-wasm/ghc-wasm-bindists/releases/download/20241116T180537/wasi-sdk-x86_64-darwin.tar.gz",
-        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3212/jobs/2038360/artifacts/dist/wasi-sdk-25.0-arm64-macos.tar.gz",
-        "sriHash": "sha256-wvTzTeb3LbAUc7KxnJ48sMpvomc33Ti4SBExXH8iDbs="
+        "mirrorUrl": "https://github.com/haskell-wasm/ghc-wasm-bindists/releases/download/20241209T182201/wasi-sdk-x86_64-darwin.tar.gz",
+        "originalUrl": "https://gitlab.haskell.org/api/v4/projects/3212/jobs/2058530/artifacts/dist/wasi-sdk-25.0-arm64-macos.tar.gz",
+        "sriHash": "sha256-v7aLVOVvnEMVXBmkIwZLr02cMDhnh3zFRd4eycQYw60="
     },
     "wasm32-wasi-ghc-9.10": {
         "ghcSubdir": "ghc-9.10.1.20241115-wasm32-wasi",
