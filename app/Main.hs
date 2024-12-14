@@ -483,9 +483,9 @@ bindistInfos =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1164,
-                  ref = "Cabal-syntax-3.14.0.0",
+                  ref = "cabal-install-v3.14.1.0",
                   jobName = "alpine-linux: [x86_64, alpine3_18, x86_64-linux]",
-                  artifactPath = "out/cabal-install-3.14.0.0-x86_64-linux-alpine3_18.tar.xz",
+                  artifactPath = "out/cabal-install-3.14.1.0-x86_64-linux-alpine3_18.tar.xz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
@@ -497,9 +497,9 @@ bindistInfos =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1164,
-                  ref = "Cabal-syntax-3.14.0.0",
+                  ref = "cabal-install-v3.14.1.0",
                   jobName = "alpine-linux: [aarch64, alpine3_18, aarch64-linux]",
-                  artifactPath = "out/cabal-install-3.14.0.0-aarch64-linux-alpine3_18.tar.xz",
+                  artifactPath = "out/cabal-install-3.14.1.0-aarch64-linux-alpine3_18.tar.xz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
@@ -511,9 +511,9 @@ bindistInfos =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1164,
-                  ref = "Cabal-syntax-3.14.0.0",
+                  ref = "cabal-install-v3.14.1.0",
                   jobName = "darwin: [aarch64, arm64]",
-                  artifactPath = "out/cabal-install-3.14.0.0-aarch64-darwin.tar.xz",
+                  artifactPath = "out/cabal-install-3.14.1.0-aarch64-darwin.tar.xz",
                   pipelineFilter = [("status", Just "success")]
                 }
           },
@@ -525,9 +525,9 @@ bindistInfos =
               GitLabArtifact
                 { gitlabDomain = "gitlab.haskell.org",
                   projectId = 1164,
-                  ref = "Cabal-syntax-3.14.0.0",
+                  ref = "cabal-install-v3.14.1.0",
                   jobName = "darwin: [x86_64, x86_64]",
-                  artifactPath = "out/cabal-install-3.14.0.0-x86_64-darwin.tar.xz",
+                  artifactPath = "out/cabal-install-3.14.1.0-x86_64-darwin.tar.xz",
                   pipelineFilter = [("status", Just "success")]
                 }
           }
